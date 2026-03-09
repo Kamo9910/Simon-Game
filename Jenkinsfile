@@ -18,7 +18,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh'''
-                    apk add aws-cli
+                    sudo apk add aws-cli
                     cd s3-bucket
                     terraform init
                     terraform apply -auto-approve
