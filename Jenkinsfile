@@ -10,7 +10,7 @@ pipeline {
         stage('Terraform Apply'){
             agent {
                 docker {
-                    image 'amazon/aws-cli'
+                    image 'hashicorp/terraform:1.5.7'
                     reuseNode true
                     args "--entrypoint=''"
                 }
@@ -18,6 +18,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh'''
+                    apk add aws-cli
                     cd s3-bucket
                     terraform init
                     terraform apply -auto-approve
