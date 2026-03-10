@@ -19,10 +19,10 @@ pipeline {
                 steps{
                     withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh''' 
-                            curl -fsSL https://releases.hashicorp.com/terraform/1.7.5/terraform1.7.5linux_amd64.zip -o terraform.zip
-                            unzip terraform.zip
-                            sudo mv terraform /usr/local/bin/
-                            rm terraform.zip
+                            RUN curl -fsSL https://releases.hashicorp.com/terraform/1.7.5/terraform_1.7.5_linux_amd64.zip -o terraform.zip \
+                            && unzip terraform.zip \
+                            && mv terraform /usr/local/bin/ \
+                            && rm terraform.zip
                             cd s3-bucket
                             terraform init
                             terraform apply -auto-approve
