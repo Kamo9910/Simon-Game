@@ -13,7 +13,6 @@ pipeline {
                         docker {
                             image 'hashicorp/terraform:1.6'
                             args "--entrypoint=''"
-                            args '-u root'
                             reuseNode true
                         }
                     }
