@@ -10,6 +10,8 @@ pipeline {
           stage('Check AWS CLI'){
             steps{
                 sh'''
+                docker build -t jenkins-awscli .
+                docker run -d -p 8080:8080 -p 50000:50000 jenkins-awscli
                 export PATH=$PATH:/user/local/bin
                 aws --version
                 '''
