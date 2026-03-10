@@ -9,13 +9,7 @@ pipeline {
   stages {
           
           stage('Terraform Apply'){
-                agent { 
-                    docker { 
-                        image 'hashicorp/terraform:1.6'
-                        args '-u root'
-                        reuseNode true
-                    } 
-                }
+                
                 steps{
                     withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh''' 
