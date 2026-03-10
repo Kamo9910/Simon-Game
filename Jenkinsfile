@@ -20,7 +20,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                 sh'''
                     aws --version
-                    AWS_S3_BUCKET=$(cat terraform/bucket.txt)
                     aws s3 sync . s3://$AWS_S3_BUCKET --delete
                 '''
                 }
