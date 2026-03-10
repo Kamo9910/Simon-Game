@@ -11,19 +11,18 @@ pipeline {
           stage('Terraform Apply'){
                 agent { 
                     docker { 
-                        image 'amazon/aws-cli'
-                        reuseNode true 
-                        args "--entrypoint=''"
+                        image 'hashicorp/terraform:1.6'
+                        args '-u root'
+                        reuseNode true
                     } 
                 }
                 steps{
                     withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh''' 
-                            apt-get update && apt-get install -y unzip
-                            curl -fsSL https://releases.hashicorp.com/terraform/1.7.5/terraform_1.7.5_linux_amd64.zip -o terraform.zip
-                            unzip terraform.zip
-                            mv terraform /usr/local/bin/
-                            rm terraform.zip
+                            apk add --no-cache python3 py3-pip
+                            pip3 install awscli
+                            terraform --version
+                            aws --version
                             cd s3-bucket
                             terraform init
                             terraform apply -auto-approve
