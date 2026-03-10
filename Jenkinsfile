@@ -7,20 +7,11 @@ pipeline {
   }
 
   stages {
-          stage('Check AWS CLI'){
-            steps{
-                sh'''
-                docker build -t jenkins-awscli .
-                kill -9 $(sudo lsof -t -i:8080)
-                docker run -d -p 8080:8080 -p 50000:50000 jenkins-awscli
-                export PATH=$PATH:/user/local/bin
-                aws --version
-                '''
-            }
-          }
+          
           stage('Terraform Apply'){
                 agent { 
                     docker { 
+                        image 'amazon/aws-cli'
                         image 'hashicorp/terraform:1.5.7'
                         reuseNode true 
                     } 
