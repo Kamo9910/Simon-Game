@@ -18,10 +18,10 @@ pipeline {
                 steps{
                     withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                         sh''' 
-                            yum install -y unzip wget
+                            sudo yum install -y unzip wget
                             wget https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
                             unzip terraform_1.5.7_linux_amd64.zip
-                            mv terraform /usr/local/bin/
+                            sudo mv terraform /usr/local/bin/
                             cd s3-bucket
                             terraform init
                             terraform apply -auto-approve
