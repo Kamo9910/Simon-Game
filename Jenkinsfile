@@ -14,6 +14,7 @@ pipeline {
                         image 'amazon/aws-cli'
                         image 'hashicorp/terraform:1.5.7'
                         reuseNode true 
+                        args "--entrypoint=''"
                     } 
                 }
                 steps{
