@@ -7,28 +7,29 @@ pipeline {
   }
 
   stages {
-        stage('Terraform Apply'){
-            agent {
-                docker {
-                    image 'amazon/aws-cli'
-                    reuseNode true
-                    args "--entrypoint=''"
+          stage('Terraform Apply'){
+                agent { 
+                    docker { 
+                        image 'amazon/aws-cli' 
+                        reuseNode true 
+                        args "--entrypoint=''" 
+                    } 
+                }
+                steps{
+                    withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                        sh''' 
+                            apk add --no-cache unzip wget
+                            wget https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
+                            unzip terraform_1.5.7_linux_amd64.zip
+                            mv terraform /usr/local/bin/
+                            cd s3-bucket
+                            terraform init
+                            terraform apply -auto-approve
+                            terraform output -raw s3-bucket_name > bucket.txt
+                        '''
+                    }
                 }
             }
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'my-aws-credentials', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
-                sh'''
-                    curl -O https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
-                    unzip terraform_1.5.7_linux_amd64.zip
-                    mv terraform /usr/local/bin/
-                    cd s3-bucket
-                    terraform init
-                    terraform apply -auto-approve
-                    terraform output -raw s3-bucket_name > bucket.txt
-                '''
-                }
-            }
-          }
           stage('AWS') {
             agent {
                 docker {
