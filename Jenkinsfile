@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     AWS_REGION = "us-east-1"
-    AWS_S3_BUCKET = "terraform-ci-cd-s3-v5"
+    AWS_S3_BUCKET = "my-static-website-38097d4f"
   }
 
   stages {
